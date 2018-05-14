@@ -1,8 +1,48 @@
-<h3>AC-5</h3>
+<!DOCTYPE html>
+<html>
+<head>
+<title>AC-5</title>
+<style type="text/css">
+body {
+  font-family: "Courier", "serif";
+}
+#main {
+  width: 37em;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2em
+}
+.author {
+  font-size: 0.8em;
+  margin-bottom: 3em;
+}
+li {
+  line-height: 1.3em;
+}
+</style>
+</head>
+<body>
+<div id="main">
+  <h2>AC-5</h2>
+  <p class="author">by Incomplete</p>
 
-<p>These are heavily documented TensorFlow codes/models for learning purpose.</p>
-<p>Each <code>.py</code> file is a standalone module, and comes with a formatted <code>.html</code> file for online reading.</p>
+  <p>This is a collection of heavily documented Python files
+     containing TensorFlow codes/models, suitable for learning.</p>
+  <p>Each <code>.py</code> file is a standalone module,
+     and comes with a solarized-light-themed <code>.html</code>
+     file for online reading.</p>
 
-<ul>
-  <li><a href="seq2seq_addition.html">seq2seq_addition</a>: Addition with a simple seq2seq model</li>
-</ul>
+  <p>The <code>.py</code> file is supposed to be executed interactively,
+     hence is organized using "cells", which is supported by various tools,
+     such as Spyder, PyCharm and Neovim with <a href="https://github.com/qwfy/vim-senter">senter</a>.</p>
+
+  <h4>TOC</h4>
+  <ul>
+    <li><a href="seq2seq_addition.py.html">seq2seq_addition</a>: Addition with a basic seq2seq model<br>
+      Given a <strong>string</strong> input <code>"12+15"</code>,
+      the model should produce a <strong>string</strong> output <code>"27"</code>.
+    </li>
+  </ul>
+</div>
+</body>
+</html>
