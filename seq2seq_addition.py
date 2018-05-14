@@ -5,7 +5,7 @@ For example, given a *string* input "1+26",
 the model should output a *string* "27".
 """
 
-# %% -------------------------------------
+# %%
 import logging
 import time
 import itertools
@@ -13,14 +13,14 @@ import itertools
 import numpy as np
 import tensorflow as tf
 
-# %% -------------------------------------
+# %%
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 logger.info(tf.__version__)
 
 
-# %% -------------------------------------
-# Named tuple will be used to hold tf variable names and hyperparamters,
+# %%
+# Named tuple will be used to hold tf variable names and hyper parameters,
 # so that no strings are passed around.
 def make_namedtuple(name, field_names, field_values):
   import collections
@@ -30,7 +30,7 @@ def make_namedtuple(name, field_names, field_values):
   return t
 
 
-# %% -------------------------------------
+# %%
 handle_fields = [
   'input_ids',
   'input_lengths',
@@ -52,7 +52,7 @@ handle_fields = [
 Handles = make_namedtuple('Handles', handle_fields, handle_fields)
 
 
-# %% -------------------------------------
+# %%
 # An encoder is just an RNN.
 # We feed it the input sequence, harvest its final state,
 # and feed that to the decoder.
@@ -108,7 +108,7 @@ def build_encoder(source_vocab_size, source_embedding_dim,
   return final_state
 
 
-# %% -------------------------------------
+# %%
 # The decoder is another RNN, it is a design choice that
 # it has the same number of layers and size with the encoder RNN.
 #
@@ -200,7 +200,7 @@ def build_decoder(encoder_state,
   return train_logits
 
 
-# %% -------------------------------------
+# %%
 # Vocabulary information
 
 # +: we only handle addition
@@ -218,7 +218,7 @@ logger.info(vocab_to_id)
 logger.info(id_to_vocab)
 
 
-# %% -------------------------------------
+# %%
 # Data preparation
 
 def pad_right(lol, vocab_to_id):
@@ -312,7 +312,7 @@ Hparams = make_namedtuple('Hparams', *zip(*[
   ('tensorboard_dir', 'tensorboard')
 ]))
 
-# %% -------------------------------------
+# %%
 train_batches = [
   make_batch(Hparams.batch_size, Hparams.data_lower, Hparams.data_upper)
   for _ in range(Hparams.num_train_batches)]
@@ -322,7 +322,7 @@ val_batches = [
   for _ in range(Hparams.num_val_batches)]
 
 
-# %% -------------------------------------
+# %%
 # Create the graph.
 def make_graph(handles, hparams):
   graph = tf.Graph()
@@ -381,7 +381,7 @@ def make_graph(handles, hparams):
 
   return graph
 
-# %% -------------------------------------
+# %%
 def restore_model(sess, checkpoint_prefix):
   loader = tf.train.import_meta_graph(checkpoint_prefix + '.meta')
   loader.restore(sess, checkpoint_prefix)
@@ -393,7 +393,7 @@ def save_model(sess, checkpoint_prefix):
   logger.info(f'model saved to {checkpoint_prefix}')
 
 
-# %% -------------------------------------
+# %%
 def train(sess: tf.Session, handles: Handles, hparams: Hparams) -> None:
   train_loss = sess.graph.get_tensor_by_name(f'{handles.train_loss}:0')
   optimize = sess.graph.get_operation_by_name(f'{handles.optimize}')
@@ -423,7 +423,7 @@ def train(sess: tf.Session, handles: Handles, hparams: Hparams) -> None:
   save_model(sess, hparams.checkpoint_prefix)
 
 
-# %% -------------------------------------
+# %%
 # Train the model from scratch.
 def cold_train(handles: Handles, hparams: Hparams) -> None:
   with tf.Session(graph=make_graph(handles, hparams)) as sess:
@@ -441,7 +441,7 @@ cold_train(Handles, Hparams)
 # INFO:__main__:model trained and saved to ckpts/ckpt
 
 
-# %% -------------------------------------
+# %%
 # If the loss is still too big and decreasing,
 # we can load the trained model and continue training.
 def warm_train(handles: Handles, hparams: Hparams) -> None:
@@ -461,7 +461,7 @@ warm_train(Handles, warmHparams)
 # INFO:__main__:model trained and saved to ckpts/ckpt
 
 
-# %% -------------------------------------
+# %%
 # See how we are doing.
 
 def translate(input_ids_var_length, handles, hparams):

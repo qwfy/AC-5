@@ -25,20 +25,20 @@ seq2seq_addition.py</FONT>
 <a name="l4"><span class="ln">4    </span></a>For example, given a *string* input &quot;1+26&quot;, 
 <a name="l5"><span class="ln">5    </span></a>the model should output a *string* &quot;27&quot;. 
 <a name="l6"><span class="ln">6    </span></a>&quot;&quot;&quot;</span><span class="s1"> 
-<a name="l7"><span class="ln">7    </span></a> <hr class="ls0"><a name="l8"><span class="ln">8    </span></a></span><span class="s0"># %% -------------------------------------</span><span class="s1"> 
+<a name="l7"><span class="ln">7    </span></a> <hr class="ls0"><a name="l8"><span class="ln">8    </span></a></span><span class="s0"># %%</span><span class="s1"> 
 <a name="l9"><span class="ln">9    </span></a></span><span class="s2">import </span><span class="s1">logging 
 <a name="l10"><span class="ln">10   </span></a></span><span class="s2">import </span><span class="s1">time 
 <a name="l11"><span class="ln">11   </span></a></span><span class="s2">import </span><span class="s1">itertools 
 <a name="l12"><span class="ln">12   </span></a> 
 <a name="l13"><span class="ln">13   </span></a></span><span class="s2">import </span><span class="s1">numpy </span><span class="s2">as </span><span class="s1">np 
 <a name="l14"><span class="ln">14   </span></a></span><span class="s2">import </span><span class="s1">tensorflow </span><span class="s2">as </span><span class="s1">tf 
-<a name="l15"><span class="ln">15   </span></a> <hr class="ls0"><a name="l16"><span class="ln">16   </span></a></span><span class="s0"># %% -------------------------------------</span><span class="s1"> 
+<a name="l15"><span class="ln">15   </span></a> <hr class="ls0"><a name="l16"><span class="ln">16   </span></a></span><span class="s0"># %%</span><span class="s1"> 
 <a name="l17"><span class="ln">17   </span></a>logging.basicConfig(level=logging.DEBUG) 
 <a name="l18"><span class="ln">18   </span></a>logger = logging.getLogger(__name__) 
 <a name="l19"><span class="ln">19   </span></a>logger.info(tf.__version__) 
 <a name="l20"><span class="ln">20   </span></a> 
-<a name="l21"><span class="ln">21   </span></a> <hr class="ls0"><a name="l22"><span class="ln">22   </span></a></span><span class="s0"># %% -------------------------------------</span><span class="s1"> 
-<a name="l23"><span class="ln">23   </span></a></span><span class="s0"># Named tuple will be used to hold tf variable names and hyperparamters,</span><span class="s1"> 
+<a name="l21"><span class="ln">21   </span></a> <hr class="ls0"><a name="l22"><span class="ln">22   </span></a></span><span class="s0"># %%</span><span class="s1"> 
+<a name="l23"><span class="ln">23   </span></a></span><span class="s0"># Named tuple will be used to hold tf variable names and hyper parameters,</span><span class="s1"> 
 <a name="l24"><span class="ln">24   </span></a></span><span class="s0"># so that no strings are passed around.</span><span class="s1"> 
 <a name="l25"><span class="ln">25   </span></a></span><span class="s2">def </span><span class="s1">make_namedtuple(name, field_names, field_values): 
 <a name="l26"><span class="ln">26   </span></a>  </span><span class="s2">import </span><span class="s1">collections 
@@ -47,7 +47,7 @@ seq2seq_addition.py</FONT>
 <a name="l29"><span class="ln">29   </span></a>    setattr(t, fname, fvalue) 
 <a name="l30"><span class="ln">30   </span></a>  </span><span class="s2">return </span><span class="s1">t 
 <a name="l31"><span class="ln">31   </span></a> 
-<a name="l32"><span class="ln">32   </span></a> <hr class="ls0"><a name="l33"><span class="ln">33   </span></a></span><span class="s0"># %% -------------------------------------</span><span class="s1"> 
+<a name="l32"><span class="ln">32   </span></a> <hr class="ls0"><a name="l33"><span class="ln">33   </span></a></span><span class="s0"># %%</span><span class="s1"> 
 <a name="l34"><span class="ln">34   </span></a>handle_fields = [ 
 <a name="l35"><span class="ln">35   </span></a>  </span><span class="s3">'input_ids'</span><span class="s1">, 
 <a name="l36"><span class="ln">36   </span></a>  </span><span class="s3">'input_lengths'</span><span class="s1">, 
@@ -68,7 +68,7 @@ seq2seq_addition.py</FONT>
 <a name="l51"><span class="ln">51   </span></a></span><span class="s0"># Various tf variable names.</span><span class="s1"> 
 <a name="l52"><span class="ln">52   </span></a>Handles = make_namedtuple(</span><span class="s3">'Handles'</span><span class="s1">, handle_fields, handle_fields) 
 <a name="l53"><span class="ln">53   </span></a> 
-<a name="l54"><span class="ln">54   </span></a> <hr class="ls0"><a name="l55"><span class="ln">55   </span></a></span><span class="s0"># %% -------------------------------------</span><span class="s1"> 
+<a name="l54"><span class="ln">54   </span></a> <hr class="ls0"><a name="l55"><span class="ln">55   </span></a></span><span class="s0"># %%</span><span class="s1"> 
 <a name="l56"><span class="ln">56   </span></a></span><span class="s0"># An encoder is just an RNN.</span><span class="s1"> 
 <a name="l57"><span class="ln">57   </span></a></span><span class="s0"># We feed it the input sequence, harvest its final state,</span><span class="s1"> 
 <a name="l58"><span class="ln">58   </span></a></span><span class="s0"># and feed that to the decoder.</span><span class="s1"> 
@@ -123,7 +123,7 @@ seq2seq_addition.py</FONT>
 <a name="l107"><span class="ln">107  </span></a> 
 <a name="l108"><span class="ln">108  </span></a>  </span><span class="s2">return </span><span class="s1">final_state 
 <a name="l109"><span class="ln">109  </span></a> 
-<a name="l110"><span class="ln">110  </span></a> <hr class="ls0"><a name="l111"><span class="ln">111  </span></a></span><span class="s0"># %% -------------------------------------</span><span class="s1"> 
+<a name="l110"><span class="ln">110  </span></a> <hr class="ls0"><a name="l111"><span class="ln">111  </span></a></span><span class="s0"># %%</span><span class="s1"> 
 <a name="l112"><span class="ln">112  </span></a></span><span class="s0"># The decoder is another RNN, it is a design choice that</span><span class="s1"> 
 <a name="l113"><span class="ln">113  </span></a></span><span class="s0"># it has the same number of layers and size with the encoder RNN.</span><span class="s1"> 
 <a name="l114"><span class="ln">114  </span></a></span><span class="s0">#</span><span class="s1"> 
@@ -214,7 +214,7 @@ seq2seq_addition.py</FONT>
 <a name="l199"><span class="ln">199  </span></a> 
 <a name="l200"><span class="ln">200  </span></a>  </span><span class="s2">return </span><span class="s1">train_logits 
 <a name="l201"><span class="ln">201  </span></a> 
-<a name="l202"><span class="ln">202  </span></a> <hr class="ls0"><a name="l203"><span class="ln">203  </span></a></span><span class="s0"># %% -------------------------------------</span><span class="s1"> 
+<a name="l202"><span class="ln">202  </span></a> <hr class="ls0"><a name="l203"><span class="ln">203  </span></a></span><span class="s0"># %%</span><span class="s1"> 
 <a name="l204"><span class="ln">204  </span></a></span><span class="s0"># Vocabulary information</span><span class="s1"> 
 <a name="l205"><span class="ln">205  </span></a> 
 <a name="l206"><span class="ln">206  </span></a></span><span class="s0"># +: we only handle addition</span><span class="s1"> 
@@ -231,7 +231,7 @@ seq2seq_addition.py</FONT>
 <a name="l217"><span class="ln">217  </span></a>logger.info(vocab_to_id) 
 <a name="l218"><span class="ln">218  </span></a>logger.info(id_to_vocab) 
 <a name="l219"><span class="ln">219  </span></a> 
-<a name="l220"><span class="ln">220  </span></a> <hr class="ls0"><a name="l221"><span class="ln">221  </span></a></span><span class="s0"># %% -------------------------------------</span><span class="s1"> 
+<a name="l220"><span class="ln">220  </span></a> <hr class="ls0"><a name="l221"><span class="ln">221  </span></a></span><span class="s0"># %%</span><span class="s1"> 
 <a name="l222"><span class="ln">222  </span></a></span><span class="s0"># Data preparation</span><span class="s1"> 
 <a name="l223"><span class="ln">223  </span></a> 
 <a name="l224"><span class="ln">224  </span></a></span><span class="s2">def </span><span class="s1">pad_right(lol, vocab_to_id): 
@@ -323,7 +323,7 @@ seq2seq_addition.py</FONT>
 <a name="l311"><span class="ln">311  </span></a>  (</span><span class="s3">'checkpoint_prefix'</span><span class="s1">, </span><span class="s3">'ckpts/ckpt'</span><span class="s1">), 
 <a name="l312"><span class="ln">312  </span></a>  (</span><span class="s3">'tensorboard_dir'</span><span class="s1">, </span><span class="s3">'tensorboard'</span><span class="s1">) 
 <a name="l313"><span class="ln">313  </span></a>])) 
-<a name="l314"><span class="ln">314  </span></a> <hr class="ls0"><a name="l315"><span class="ln">315  </span></a></span><span class="s0"># %% -------------------------------------</span><span class="s1"> 
+<a name="l314"><span class="ln">314  </span></a> <hr class="ls0"><a name="l315"><span class="ln">315  </span></a></span><span class="s0"># %%</span><span class="s1"> 
 <a name="l316"><span class="ln">316  </span></a>train_batches = [ 
 <a name="l317"><span class="ln">317  </span></a>  make_batch(Hparams.batch_size, Hparams.data_lower, Hparams.data_upper) 
 <a name="l318"><span class="ln">318  </span></a>  </span><span class="s2">for </span><span class="s1">_ </span><span class="s2">in </span><span class="s1">range(Hparams.num_train_batches)] 
@@ -332,7 +332,7 @@ seq2seq_addition.py</FONT>
 <a name="l321"><span class="ln">321  </span></a>  make_batch(Hparams.batch_size, Hparams.data_lower, Hparams.data_upper) 
 <a name="l322"><span class="ln">322  </span></a>  </span><span class="s2">for </span><span class="s1">_ </span><span class="s2">in </span><span class="s1">range(Hparams.num_val_batches)] 
 <a name="l323"><span class="ln">323  </span></a> 
-<a name="l324"><span class="ln">324  </span></a> <hr class="ls0"><a name="l325"><span class="ln">325  </span></a></span><span class="s0"># %% -------------------------------------</span><span class="s1"> 
+<a name="l324"><span class="ln">324  </span></a> <hr class="ls0"><a name="l325"><span class="ln">325  </span></a></span><span class="s0"># %%</span><span class="s1"> 
 <a name="l326"><span class="ln">326  </span></a></span><span class="s0"># Create the graph.</span><span class="s1"> 
 <a name="l327"><span class="ln">327  </span></a></span><span class="s2">def </span><span class="s1">make_graph(handles, hparams): 
 <a name="l328"><span class="ln">328  </span></a>  graph = tf.Graph() 
@@ -390,7 +390,7 @@ seq2seq_addition.py</FONT>
 <a name="l380"><span class="ln">380  </span></a>    summary_writer.close() 
 <a name="l381"><span class="ln">381  </span></a> 
 <a name="l382"><span class="ln">382  </span></a>  </span><span class="s2">return </span><span class="s1">graph 
-<a name="l383"><span class="ln">383  </span></a> <hr class="ls0"><a name="l384"><span class="ln">384  </span></a></span><span class="s0"># %% -------------------------------------</span><span class="s1"> 
+<a name="l383"><span class="ln">383  </span></a> <hr class="ls0"><a name="l384"><span class="ln">384  </span></a></span><span class="s0"># %%</span><span class="s1"> 
 <a name="l385"><span class="ln">385  </span></a></span><span class="s2">def </span><span class="s1">restore_model(sess, checkpoint_prefix): 
 <a name="l386"><span class="ln">386  </span></a>  loader = tf.train.import_meta_graph(checkpoint_prefix + </span><span class="s3">'.meta'</span><span class="s1">) 
 <a name="l387"><span class="ln">387  </span></a>  loader.restore(sess, checkpoint_prefix) 
@@ -401,7 +401,7 @@ seq2seq_addition.py</FONT>
 <a name="l392"><span class="ln">392  </span></a>  saver.save(sess, checkpoint_prefix) 
 <a name="l393"><span class="ln">393  </span></a>  logger.info(</span><span class="s3">f'model saved to {checkpoint_prefix}'</span><span class="s1">) 
 <a name="l394"><span class="ln">394  </span></a> 
-<a name="l395"><span class="ln">395  </span></a> <hr class="ls0"><a name="l396"><span class="ln">396  </span></a></span><span class="s0"># %% -------------------------------------</span><span class="s1"> 
+<a name="l395"><span class="ln">395  </span></a> <hr class="ls0"><a name="l396"><span class="ln">396  </span></a></span><span class="s0"># %%</span><span class="s1"> 
 <a name="l397"><span class="ln">397  </span></a></span><span class="s2">def </span><span class="s1">train(sess: tf.Session, handles: Handles, hparams: Hparams) -&gt; </span><span class="s2">None</span><span class="s1">: 
 <a name="l398"><span class="ln">398  </span></a>  train_loss = sess.graph.get_tensor_by_name(</span><span class="s3">f'{handles.train_loss}:0'</span><span class="s1">) 
 <a name="l399"><span class="ln">399  </span></a>  optimize = sess.graph.get_operation_by_name(</span><span class="s3">f'{handles.optimize}'</span><span class="s1">) 
@@ -430,7 +430,7 @@ seq2seq_addition.py</FONT>
 <a name="l422"><span class="ln">422  </span></a> 
 <a name="l423"><span class="ln">423  </span></a>  save_model(sess, hparams.checkpoint_prefix) 
 <a name="l424"><span class="ln">424  </span></a> 
-<a name="l425"><span class="ln">425  </span></a> <hr class="ls0"><a name="l426"><span class="ln">426  </span></a></span><span class="s0"># %% -------------------------------------</span><span class="s1"> 
+<a name="l425"><span class="ln">425  </span></a> <hr class="ls0"><a name="l426"><span class="ln">426  </span></a></span><span class="s0"># %%</span><span class="s1"> 
 <a name="l427"><span class="ln">427  </span></a></span><span class="s0"># Train the model from scratch.</span><span class="s1"> 
 <a name="l428"><span class="ln">428  </span></a></span><span class="s2">def </span><span class="s1">cold_train(handles: Handles, hparams: Hparams) -&gt; </span><span class="s2">None</span><span class="s1">: 
 <a name="l429"><span class="ln">429  </span></a>  </span><span class="s2">with </span><span class="s1">tf.Session(graph=make_graph(handles, hparams)) </span><span class="s2">as </span><span class="s1">sess: 
@@ -447,7 +447,7 @@ seq2seq_addition.py</FONT>
 <a name="l440"><span class="ln">440  </span></a></span><span class="s0"># INFO:__main__:epoch=360/360 train_loss=0.1868 val_loss=0.1850 duratoin=4.6427s</span><span class="s1"> 
 <a name="l441"><span class="ln">441  </span></a></span><span class="s0"># INFO:__main__:model trained and saved to ckpts/ckpt</span><span class="s1"> 
 <a name="l442"><span class="ln">442  </span></a> 
-<a name="l443"><span class="ln">443  </span></a> <hr class="ls0"><a name="l444"><span class="ln">444  </span></a></span><span class="s0"># %% -------------------------------------</span><span class="s1"> 
+<a name="l443"><span class="ln">443  </span></a> <hr class="ls0"><a name="l444"><span class="ln">444  </span></a></span><span class="s0"># %%</span><span class="s1"> 
 <a name="l445"><span class="ln">445  </span></a></span><span class="s0"># If the loss is still too big and decreasing,</span><span class="s1"> 
 <a name="l446"><span class="ln">446  </span></a></span><span class="s0"># we can load the trained model and continue training.</span><span class="s1"> 
 <a name="l447"><span class="ln">447  </span></a></span><span class="s2">def </span><span class="s1">warm_train(handles: Handles, hparams: Hparams) -&gt; </span><span class="s2">None</span><span class="s1">: 
@@ -466,7 +466,7 @@ seq2seq_addition.py</FONT>
 <a name="l460"><span class="ln">460  </span></a></span><span class="s0"># INFO:__main__:epoch=120/120 train_loss=0.0448 val_loss=0.0738 duratoin=4.9770s</span><span class="s1"> 
 <a name="l461"><span class="ln">461  </span></a></span><span class="s0"># INFO:__main__:model trained and saved to ckpts/ckpt</span><span class="s1"> 
 <a name="l462"><span class="ln">462  </span></a> 
-<a name="l463"><span class="ln">463  </span></a> <hr class="ls0"><a name="l464"><span class="ln">464  </span></a></span><span class="s0"># %% -------------------------------------</span><span class="s1"> 
+<a name="l463"><span class="ln">463  </span></a> <hr class="ls0"><a name="l464"><span class="ln">464  </span></a></span><span class="s0"># %%</span><span class="s1"> 
 <a name="l465"><span class="ln">465  </span></a></span><span class="s0"># See how we are doing.</span><span class="s1"> 
 <a name="l466"><span class="ln">466  </span></a> 
 <a name="l467"><span class="ln">467  </span></a></span><span class="s2">def </span><span class="s1">translate(input_ids_var_length, handles, hparams): 
@@ -572,6 +572,7 @@ seq2seq_addition.py</FONT>
 <a name="l567"><span class="ln">567  </span></a></span><span class="s0"># ✗ 101+102 = -77</span><span class="s1"> 
 <a name="l568"><span class="ln">568  </span></a></span><span class="s0"># ✗ 123+54 = 48</span><span class="s1"> 
 <a name="l569"><span class="ln">569  </span></a></span><span class="s0"># ✗ 142+173 = -34</span><span class="s1"> 
-<a name="l570"><span class="ln">570  </span></a></span><span class="s0"># ✗ 256+254 = 30</span></pre>
+<a name="l570"><span class="ln">570  </span></a></span><span class="s0"># ✗ 256+254 = 30</span><span class="s1"> 
+<a name="l571"><span class="ln">571  </span></a></span></pre>
 </body>
 </html>
