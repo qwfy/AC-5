@@ -418,7 +418,7 @@ def train(sess: tf.Session, handles: Handles, hparams: Hparams) -> None:
       f'epoch={i_epoch:0{len(str(hparams.num_epochs))}d}/{hparams.num_epochs}',
       f'train_loss={train_loss_val:.4f}',
       f'val_loss={val_loss_val:.4f}',
-      f'duratoin={time_end-time_begin:.4f}s']))
+      f'duration={time_end-time_begin:.4f}s']))
 
   save_model(sess, hparams.checkpoint_prefix)
 
