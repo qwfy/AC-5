@@ -308,7 +308,7 @@ Hparams = make_namedtuple('Hparams', *zip(*[
   ('data_lower', -100),
   ('data_upper', 100),
 
-  ('checkpoint_prefix', 'ckpts/ckpt'),
+  ('checkpoint_prefix', 'checkpoints/seq2seq_addition/model'),
   ('tensorboard_dir', 'tensorboard')
 ]))
 
