@@ -9,6 +9,7 @@ the model should output a *string* "27".
 import logging
 import time
 import itertools
+import os
 
 import numpy as np
 import tensorflow as tf
@@ -16,7 +17,7 @@ import tensorflow as tf
 # %%
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-logger.info(tf.__version__)
+logger.info(tf.VERSION)
 
 
 # %%
@@ -46,7 +47,9 @@ handle_fields = [
   'optimize',
   'infer_logits',
 
-  'batch_size']
+  'batch_size',
+  'train_loss_summary',
+  'val_loss_summary']
 
 # Various tf variable names.
 Handles = make_namedtuple('Handles', handle_fields, handle_fields)
@@ -300,7 +303,7 @@ Hparams = make_namedtuple('Hparams', *zip(*[
   # NB, you don't want to batch_size * num_train_batches close to (data_upper - data_lower),
   # otherwise the model may memorise the universe and we will have no test data.
   ('batch_size', 128),
-  ('num_epochs', 360),
+  ('num_epochs', 480),
   ('num_train_batches', 100),
   ('num_val_batches', 10),
 
@@ -311,6 +314,7 @@ Hparams = make_namedtuple('Hparams', *zip(*[
   ('checkpoint_prefix', 'checkpoints/seq2seq_addition/model'),
   ('tensorboard_dir', 'tensorboard')
 ]))
+os.makedirs(os.path.dirname(Hparams.checkpoint_prefix), exist_ok=True)
 
 # %%
 train_batches = [
@@ -368,16 +372,15 @@ def make_graph(handles, hparams):
       weights=loss_mask)
     train_loss = tf.identity(train_loss_, name=handles.train_loss)
 
+    tf.summary.scalar(handles.train_loss_summary, train_loss)
+    tf.summary.scalar(handles.val_loss_summary, train_loss)
+
     optimizer = tf.train.AdamOptimizer(hparams.lr)
     gradients = optimizer.compute_gradients(train_loss)
     clipped_gradients = [(tf.clip_by_value(grad, -5., 5.), var)
                          for grad, var in gradients if grad is not None]
     optimizer.apply_gradients(clipped_gradients, name=handles.optimize)
 
-    summary_writer = tf.summary.FileWriter(
-      logdir=hparams.tensorboard_dir,
-      graph=tf.get_default_graph())
-    summary_writer.close()
 
   return graph
 
@@ -395,30 +398,42 @@ def save_model(sess, checkpoint_prefix):
 
 # %%
 def train(sess: tf.Session, handles: Handles, hparams: Hparams) -> None:
-  train_loss = sess.graph.get_tensor_by_name(f'{handles.train_loss}:0')
-  optimize = sess.graph.get_operation_by_name(f'{handles.optimize}')
+  with tf.summary.FileWriter(
+    logdir=hparams.tensorboard_dir,
+    graph=sess.graph
+  ) as summary_writer:
 
-  for i_epoch in range(1, hparams.num_epochs + 1):
-    time_begin = time.monotonic()
-    train_loss_vals = []
-    for feed in get_feed(all_batches=train_batches, graph=sess.graph, handles=handles):
-      train_loss_val, _ = sess.run([train_loss, optimize], feed)
-      train_loss_vals.append(train_loss_val)
+    train_loss = sess.graph.get_tensor_by_name(f'{handles.train_loss}:0')
+    optimize = sess.graph.get_operation_by_name(handles.optimize)
 
-    val_loss_vals = []
-    for feed in get_feed(all_batches=val_batches, graph=sess.graph, handles=handles):
-      val_loss_val = sess.run(train_loss, feed)
-      val_loss_vals.append(val_loss_val)
+    train_loss_summary = sess.graph.get_tensor_by_name(f'{handles.train_loss_summary}:0')
+    val_loss_summary = sess.graph.get_tensor_by_name(f'{handles.val_loss_summary}:0')
 
-    train_loss_val = np.mean(train_loss_vals[-len(val_loss_vals):])
-    val_loss_val = np.mean(val_loss_vals)
+    global_step = 0
+    for i_epoch in range(1, hparams.num_epochs + 1):
+      time_begin = time.monotonic()
+      train_loss_vals = []
+      for feed in get_feed(all_batches=train_batches, graph=sess.graph, handles=handles):
+        global_step += 1
+        train_loss_val, _, summary_val = sess.run([train_loss, optimize, train_loss_summary], feed)
+        summary_writer.add_summary(summary_val, global_step=global_step)
+        train_loss_vals.append(train_loss_val)
 
-    time_end = time.monotonic()
-    logger.info(' '.join([
-      f'epoch={i_epoch:0{len(str(hparams.num_epochs))}d}/{hparams.num_epochs}',
-      f'train_loss={train_loss_val:.4f}',
-      f'val_loss={val_loss_val:.4f}',
-      f'duration={time_end-time_begin:.4f}s']))
+      val_loss_vals = []
+      for feed in get_feed(all_batches=val_batches, graph=sess.graph, handles=handles):
+        val_loss_val, summary_val = sess.run([train_loss, val_loss_summary], feed)
+        summary_writer.add_summary(summary_val, global_step=global_step)
+        val_loss_vals.append(val_loss_val)
+
+      train_loss_val = np.mean(train_loss_vals[-len(val_loss_vals):])
+      val_loss_val = np.mean(val_loss_vals)
+
+      time_end = time.monotonic()
+      logger.info(' '.join([
+        f'epoch={i_epoch:0{len(str(hparams.num_epochs))}d}/{hparams.num_epochs}',
+        f'train_loss={train_loss_val:.4f}',
+        f'val_loss={val_loss_val:.4f}',
+        f'duration={time_end-time_begin:.4f}s']))
 
   save_model(sess, hparams.checkpoint_prefix)
 
