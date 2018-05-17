@@ -13,6 +13,7 @@ import os
 
 import numpy as np
 import tensorflow as tf
+import tensorflow.contrib as contrib
 
 # %%
 logging.basicConfig(level=logging.DEBUG)
@@ -76,7 +77,7 @@ def build_encoder(source_vocab_size, source_embedding_dim,
   # Embedded version of input_ids.
   # (batch_size, max_time, source_embedding_dim)
   # where max_time == tf.shape(input_ids)[1] == tf.reduce_max(sequence_lengths)
-  inputs_embedded = tf.contrib.layers.embed_sequence(
+  inputs_embedded = contrib.layers.embed_sequence(
     ids=input_ids,
     vocab_size=source_vocab_size,
     embed_dim=source_embedding_dim)
@@ -162,13 +163,13 @@ def build_decoder(encoder_state,
 
   def make_logits(helper, reuse):
     with tf.variable_scope('decoder', reuse=reuse):
-      decoder = tf.contrib.seq2seq.BasicDecoder(
+      decoder = contrib.seq2seq.BasicDecoder(
         cell=multi_rnn_cell,
         helper=helper,
         initial_state=encoder_state,
         output_layer=projection_layer)
 
-      final_outputs, _final_state, _final_sequence_length = tf.contrib.seq2seq.dynamic_decode(
+      final_outputs, _final_state, _final_sequence_length = contrib.seq2seq.dynamic_decode(
         decoder=decoder,
         maximum_iterations=max_decode_iterations,
         impute_finished=True)
@@ -181,7 +182,7 @@ def build_decoder(encoder_state,
   #
   # At time t, a TrainingHelper just read data from inputs[:, t],
   # and use it as the input at t .
-  train_helper = tf.contrib.seq2seq.TrainingHelper(
+  train_helper = contrib.seq2seq.TrainingHelper(
     inputs=inputs_embedded,
     sequence_length=sequence_lengths)
 
@@ -189,7 +190,7 @@ def build_decoder(encoder_state,
   # So at time t, output at t-1, which has the shape (vocab_size,),
   # (considering only one sample), is sampled from, and is used as the input at time t,
   # i.e. input at t = lookup_embedding(embedding, argmax(output at t-1))
-  infer_helper = tf.contrib.seq2seq.GreedyEmbeddingHelper(
+  infer_helper = contrib.seq2seq.GreedyEmbeddingHelper(
     embedding=input_embeddings,
     start_tokens=tf.tile(tf.constant([vocab_to_id['<SOS>']]), [batch_size]),
     end_token=vocab_to_id['<EOS>'])
@@ -366,7 +367,7 @@ def make_graph(handles, hparams):
     # Since out target_ids is effectively of variant length,
     # we mask out those padding positions.
     loss_mask = tf.sequence_mask(lengths=target_lengths, dtype=tf.float32)
-    train_loss_ = tf.contrib.seq2seq.sequence_loss(
+    train_loss_ = contrib.seq2seq.sequence_loss(
       logits=train_logits,
       targets=target_ids,
       weights=loss_mask)
