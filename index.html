@@ -17,7 +17,11 @@ body {
   margin-bottom: 3em;
 }
 li {
+  margin-top: 0.8em;
   line-height: 1.3em;
+}
+a {
+  text-decoration: none;
 }
 </style>
 </head>
@@ -26,8 +30,9 @@ li {
   <h2>AC-5</h2>
   <p class="author">by Incomplete</p>
 
-  <p>This is a collection of heavily documented Python files
-     containing TensorFlow codes/models, suitable for learning.</p>
+  <p>This is a collection of heavily documented Python files/Jupyter Notebooks
+     containing TensorFlow codes/models.</p>
+
   <p>Each <code>.py</code> file is a standalone module,
      and comes with a solarized-light-themed <code>.html</code>
      file for online reading.</p>
@@ -36,14 +41,17 @@ li {
      hence is organized using "cells", which is supported by various tools,
      such as Spyder, PyCharm and Neovim with <a href="https://github.com/qwfy/vim-senter">senter</a>.</p>
 
-  <p>All the <code>.py</code> files can be found at
+  <p>All the codes can be found at
      <a href="https://github.com/qwfy/AC-5">github.com/qwfy/AC-5</a>.</p>
 
   <h4>TOC</h4>
   <ul>
-    <li><a href="seq2seq_addition.py.html">seq2seq_addition</a>: Addition with a basic seq2seq model<br>
+    <li><a href="seq2seq_addition.py.html">seq2seq_addition.py</a>: Addition with a basic seq2seq model.<br>
       Given a <strong>string</strong> input <code>"12+15"</code>,
       the model should produce a <strong>string</strong> output <code>"27"</code>.
+    </li>
+    <li><a href="attention_word_to_number.html">attention_word_to_number.ipynb</a>: Tutorial on attention-based seq2seq model.<br>
+      It includes both the math and the code. A model is built to translate string like <code>"one hundred and twenty seven"</code> to string <code>"127"</code>.
     </li>
   </ul>
 </div>
